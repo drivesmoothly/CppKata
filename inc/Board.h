@@ -8,6 +8,8 @@
 #ifndef BOARD_H_
 #define BOARD_H_
 
+#include <vector>
+
 namespace reversi
 {
 
@@ -19,6 +21,16 @@ class Board
 private:
 	/// Stores the board size
 	int _size;
+	/// A vector of values
+	std::vector<char> _matrix;
+
+	/**
+	 * Sets a value at a specific coordinate.
+	 * @param row The row coordinate.
+	 * @param col The column coordinate.
+	 * @param val The value to set.
+	 */
+	inline void SetValueAt(int row, int col, char val);
 
 public:
 	/**
@@ -26,7 +38,48 @@ public:
 	 * @param size The size of the board. Defaults to 8.
 	 */
 	Board(int size = 8);
+
+	/**
+	 * Retrieves the number of black counters in the board.
+	 * @return The number of black counters.
+	 */
+	int GetBlackCount() const;
+
+	/**
+	 * Retrieves the number of white counters in the board.
+	 * @return The number of white counters.
+	 */
+	int GetWhiteCount() const;
+
+	/**
+	 * Retrieves a value at a specific coordinate.
+	 * @param row The row coordinate.
+	 * @param col The column coordinate.
+	 * @return The value at the coordinates.
+	 */
+	inline char GetValueAt(int row, int col) const;
+
+	/**
+	 * Retrieves the board size.
+	 * @return The size.
+	 */
+	inline int GetSize() const;
 };
+
+inline void Board::SetValueAt(int row, int col, char val)
+{
+	_matrix[col + row * _size] = val;
+}
+
+inline char Board::GetValueAt(int row, int col) const
+{
+	return _matrix[col + row * _size];
+}
+
+inline int Board::GetSize() const
+{
+	return _size;
+}
 
 }
 
