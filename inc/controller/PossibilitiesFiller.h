@@ -32,6 +32,11 @@ public:
 	 * @param b The board.
 	 */
 	PossibilitiesFiller(Board& b);
+
+	/**
+	 * Fills the possibilities for white.
+	 */
+	void FillWhite();
 };
 
 }

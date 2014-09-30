@@ -14,3 +14,12 @@ TEST(PossibilitiesFiller, TestCreateNewFiller)
 	reversi::Board b;
 	reversi::PossibilitiesFiller filler(b);
 }
+
+TEST(PossibilitiesFiller, TestFillWhiteOnDefaultBoard)
+{
+	reversi::Board b;
+	reversi::PossibilitiesFiller filler(b);
+	filler.FillWhite();
+
+	ASSERT_EQ(1, b.GetValueAt(3, 2));
+}
