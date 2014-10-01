@@ -36,7 +36,7 @@ TEST(PossibilitiesFiller, TestMarkFirstWhiteOnDefaultBoard)
 	ASSERT_EQ(1, b.GetValueAt(2, 3));
 }
 
-TEST(PossibilitiesFiller, TestMarkSecondWhite)
+TEST(PossibilitiesFiller, TestMark2VerticalWhites)
 {
 	reversi::Board b;
 	reversi::PossibilitiesMarker marker{b};
@@ -57,4 +57,24 @@ TEST(PossibilitiesFiller, TestMarkSecondWhite)
 	marker.MarkForWhite();
 
 	ASSERT_EQ(2, b.GetValueAt(2, 4));
+}
+
+TEST(PossibilitiesFiller, TestMarkSecondWhiteOnDefaultBoard)
+{
+	// ........
+	// ........
+	// ...1....
+	// ..2BW...
+	// ...WB...
+	// ........
+	// ........
+	// ........
+	reversi::Board b;
+	reversi::Game g{b};
+	reversi::PossibilitiesMarker marker{b};
+
+	g.NewGame();
+	marker.MarkForWhite();
+
+	ASSERT_EQ(2, b.GetValueAt(3, 2));
 }
