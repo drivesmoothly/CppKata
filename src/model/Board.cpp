@@ -102,6 +102,8 @@ std::istream& reversi::operator >>(std::istream& is, Board& b)
 {
 	std::string line{};
 	is >> line;
+	if (!is.good())
+		throw std::invalid_argument("Invalid board");
 	unsigned int size = line.length();
 	b.Reset(size);
 
@@ -117,10 +119,15 @@ std::istream& reversi::operator >>(std::istream& is, Board& b)
 			b.SetValueAt(currentLine, col++, c == '.' ? Board::Empty : c == 'W' ? Board::White : Board::Black);
 		}
 
-		is >> line;
-		if (line.length() != size)
-			throw std::invalid_argument{"Invalid line size"};
 		currentLine++;
+		if (currentLine < size)
+		{
+			is >> line;
+			if (!is.good())
+				throw std::invalid_argument("Invalid board");
+			if (line.length() != size)
+				throw std::invalid_argument{"Invalid line size"};
+		}
 	}
 
 	return is;
