@@ -93,7 +93,7 @@ TEST(PossibilitiesMarker, TestMarkBlackAfter3Moves)
 	ASSERT_EQ(5, b.GetValueAt(5, 6));
 }
 
-TEST(PossibilitiesMarker, TestMarkBlackAfter4Moves)
+TEST(PossibilitiesMarker, TestWhiteBlackAfter4Moves)
 {
 	reversi::Board b;
 	reversi::PossibilitiesMarker marker{b};
@@ -113,5 +113,7 @@ TEST(PossibilitiesMarker, TestMarkBlackAfter4Moves)
 
 	marker.MarkFor(reversi::Board::White);
 
-	std::cout << b;
+	ASSERT_EQ(1, b.GetValueAt(2, 3));
+	ASSERT_EQ(2, b.GetValueAt(2, 5));
+	ASSERT_EQ(3, b.GetValueAt(6, 5));
 }
