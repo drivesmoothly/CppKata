@@ -15,7 +15,7 @@ using namespace reversi;
 //
 Board::Board(unsigned int size)
 : _size{ size }
-, _matrix( size * size, '.' )
+, _matrix( size * size, Board::Empty )
 {
 }
 
@@ -23,19 +23,21 @@ Board::Board(unsigned int size)
 //
 int Board::GetBlackCount() const
 {
-	return std::count_if(_matrix.begin(), _matrix.end(), [](char c) { return c == 'B';} );
+	return std::count_if(_matrix.begin(), _matrix.end(),
+			[](value_type c) { return c == Board::Black;} );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 int Board::GetWhiteCount() const
 {
-	return std::count_if(_matrix.begin(), _matrix.end(), [] (char c){ return c == 'W';} );
+	return std::count_if(_matrix.begin(), _matrix.end(),
+			[] (value_type c){ return c == Board::White;} );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-int Board::FindOnColumn(int col, char value) const
+int Board::FindOnColumn(int col, value_type value) const
 {
 	for (unsigned int i{0}; i != _size; ++i)
 		if (GetValueAt(i, col) == value)
@@ -45,10 +47,20 @@ int Board::FindOnColumn(int col, char value) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+int Board::FindOnRow(int row, value_type value) const
+{
+	for (unsigned int i{0}; i != _size; ++i)
+		if (GetValueAt(row, i) == value)
+			return i;
+	return -1;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 void Board::Reset(int size)
 {
-	_matrix.resize(size * size, '.');
-	std::fill(_matrix.begin(), _matrix.end(), '.');
+	_matrix.resize(size * size);
+	std::fill(_matrix.begin(), _matrix.end(), Board::Empty);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,7 +70,8 @@ void Board::Serialize(std::ostream& os) const
 	auto it = _matrix.begin();
 	for (unsigned int i{0}; i < _size; ++i)
 	{
-		std::for_each(it, it + _size, [&os](char c){ os << c; });
+		std::for_each(it, it + _size, [&os](value_type c)
+				{ os << ((c == Board::Black) ? 'B' : (c == Board::White) ? 'W' : '.');});
 		it += _size;
 		os << std::endl;
 	}
@@ -82,7 +95,7 @@ std::istream& reversi::operator >>(std::istream& is, Board& b)
 		{
 			if (std::find(ALLOWED_CHARS.begin(), ALLOWED_CHARS.end(), c) == ALLOWED_CHARS.end())
 				throw std::invalid_argument{"Invalid characters in input stream"};
-			b.SetValueAt(currentLine, col++, c);
+			b.SetValueAt(currentLine, col++, c == '.' ? Board::Empty : c == 'W' ? Board::White : Board::Black);
 		}
 
 		is >> line;

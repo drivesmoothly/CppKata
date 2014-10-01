@@ -20,11 +20,26 @@ namespace reversi
 	 */
 	class Board
 	{
+	public:
+		/**
+		 * Defines the value type.
+		 */
+		using value_type = unsigned char;
+		/**
+		 * Defines the counter values.
+		 */
+		enum Counter
+		{
+			Empty = 250,//!< Empty
+			Black = 251,//!< Black
+			White = 252 //!< White
+		};
+
 	private:
 		/// Stores the board size
 		unsigned int _size;
 		/// A vector of values
-		std::vector<char> _matrix;
+		std::vector<value_type> _matrix;
 
 	public:
 		/**
@@ -51,7 +66,7 @@ namespace reversi
 		 * @param col The column coordinate.
 		 * @return The value at the coordinates.
 		 */
-		inline char GetValueAt(unsigned int row, unsigned int col) const;
+		inline value_type GetValueAt(unsigned int row, unsigned int col) const;
 
 		/**
 		 * Sets a value at a specific coordinate.
@@ -59,7 +74,7 @@ namespace reversi
 		 * @param col The column coordinate.
 		 * @param val The value to set.
 		 */
-		inline void SetValueAt(unsigned int row, unsigned int col, char val);
+		inline void SetValueAt(unsigned int row, unsigned int col, value_type val);
 
 		/**
 		 * Retrieves the board size.
@@ -73,7 +88,15 @@ namespace reversi
 		 * @param value The value to find.
 		 * @return -1 if not found. The row index if we found it.
 		 */
-		int FindOnColumn(int col, char value) const;
+		int FindOnColumn(int col, value_type value) const;
+
+		/**
+		 * Finds a value on a given row.
+		 * @param row The row to find the value in.
+		 * @param value The value to find.
+		 * @return -1 if not found. The col index if we found it.
+		 */
+		int FindOnRow(int row, value_type value) const;
 
 		/**
 		 * Resets the board to empty.
@@ -106,14 +129,14 @@ namespace reversi
 
 	///////////////////////////////////////////////////////////////////////////////
 	//
-	inline char Board::GetValueAt(unsigned int row, unsigned int col) const
+	inline Board::value_type Board::GetValueAt(unsigned int row, unsigned int col) const
 	{
 		return _matrix.at(col + row * _size);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
 	//
-	inline void Board::SetValueAt(unsigned int row, unsigned int col, char val)
+	inline void Board::SetValueAt(unsigned int row, unsigned int col, value_type val)
 	{
 		_matrix.at(col + row * _size) = val;
 	}
@@ -123,6 +146,24 @@ namespace reversi
 	inline int Board::GetSize() const
 	{
 		return _size;
+	}
+
+	/**
+	 * Retrieves the opposite counter to the given one.
+	 * @param v The counter to get the opposite for.
+	 * @return The opposite
+	 */
+	inline Board::value_type GetOpposite(Board::Counter v)
+	{
+		switch (v)
+		{
+		case Board::Black:
+			return Board::White;
+		case Board::White:
+			return Board::Black;
+		default:
+			throw std::invalid_argument{"Not a counter"};
+		}
 	}
 }
 
