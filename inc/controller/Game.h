@@ -33,6 +33,4 @@ namespace reversi
 
 }
 
-
-
 #endif /* GAME_H_ */

@@ -15,8 +15,9 @@ Game::Game(Board& b)
 void Game::NewGame()
 {
 	_board.Reset();
-	_board.SetValueAt(_board.GetSize() / 2 - 1, _board.GetSize() / 2 - 1, 'B');
-	_board.SetValueAt(_board.GetSize() / 2, _board.GetSize() / 2, 'B');
-	_board.SetValueAt(_board.GetSize() / 2 - 1, _board.GetSize() / 2, 'W');
-	_board.SetValueAt(_board.GetSize() / 2, _board.GetSize() / 2 - 1, 'W');
+	int size{_board.GetSize()};
+	_board.SetValueAt(size / 2 - 1, size / 2 - 1, 'B');
+	_board.SetValueAt(size / 2, size / 2, 'B');
+	_board.SetValueAt(size / 2 - 1, size / 2, 'W');
+	_board.SetValueAt(size / 2, size / 2 - 1, 'W');
 }

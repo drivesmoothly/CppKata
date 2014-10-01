@@ -9,6 +9,8 @@
 #define BOARD_H_
 
 #include <vector>
+#include <iostream>
+#include <stdexcept>
 
 namespace reversi
 {
@@ -20,7 +22,7 @@ namespace reversi
 	{
 	private:
 		/// Stores the board size
-		int _size;
+		unsigned int _size;
 		/// A vector of values
 		std::vector<char> _matrix;
 
@@ -29,7 +31,7 @@ namespace reversi
 		 * Constructor.
 		 * @param size The size of the board. Defaults to 8.
 		 */
-		Board(int size = 8);
+		Board(unsigned int size = 8);
 
 		/**
 		 * Retrieves the number of black counters in the board.
@@ -49,7 +51,7 @@ namespace reversi
 		 * @param col The column coordinate.
 		 * @return The value at the coordinates.
 		 */
-		inline char GetValueAt(int row, int col) const;
+		inline char GetValueAt(unsigned int row, unsigned int col) const;
 
 		/**
 		 * Sets a value at a specific coordinate.
@@ -57,7 +59,7 @@ namespace reversi
 		 * @param col The column coordinate.
 		 * @param val The value to set.
 		 */
-		inline void SetValueAt(int row, int col, char val);
+		inline void SetValueAt(unsigned int row, unsigned int col, char val);
 
 		/**
 		 * Retrieves the board size.
@@ -75,21 +77,48 @@ namespace reversi
 
 		/**
 		 * Resets the board to empty.
+		 * @param size The new size of the board.
 		 */
-		void Reset();
+		void Reset(int size = 8);
+
+		/**
+		 * Serializes the board to the given output stream.
+		 * @param os The output stream to serialize to.
+		 */
+		void Serialize(std::ostream& os) const;
 	};
+
+	/**
+	 * Read a board from stream.
+	 * @param is The input stream to read from.
+	 * @param b The board to read to.
+	 * @return A reference to the same istream for chaining operations.
+	 */
+	std::istream& operator >>(std::istream& is, Board& b);
+
+	/**
+	 * Writes a board to a stream.
+	 * @param os The output stream to write to.
+	 * @param b The board to write.
+	 * @return A reference to the same ostream for chaining operations.
+	 */
+	std::ostream& operator <<(std::ostream& os, const Board& b);
 
 	///////////////////////////////////////////////////////////////////////////////
 	//
-	inline char Board::GetValueAt(int row, int col) const
+	inline char Board::GetValueAt(unsigned int row, unsigned int col) const
 	{
+		if (_matrix.size() <= (col + row * _size))
+			throw std::range_error{"Row or column out of range"};
 		return _matrix[col + row * _size];
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
 	//
-	inline void Board::SetValueAt(int row, int col, char val)
+	inline void Board::SetValueAt(unsigned int row, unsigned int col, char val)
 	{
+		if (_matrix.size() <= (col + row * _size))
+			throw std::range_error{"Row or column out of range"};
 		_matrix[col + row * _size] = val;
 	}
 
@@ -99,8 +128,6 @@ namespace reversi
 	{
 		return _size;
 	}
-
 }
-
 
 #endif /* BOARD_H_ */
