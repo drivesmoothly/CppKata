@@ -34,7 +34,7 @@ namespace reversi
 		/**
 		 * Fills the possibilities for white.
 		 */
-		void MarkForWhite();
+		void MarkFor(Board::Counter counter);
 
 	private:
 
@@ -64,8 +64,18 @@ namespace reversi
 		 * @param v The value to find.
 		 * @return true if found, false if not.
 		 */
-		bool FindNextContiguous(int row, int col, Board::Counter v,
-				std::function<void(int&, int&)> moveToNext);
+		bool FindNextContiguous(int row, int col, Board::Counter v, Point direction);
+
+		/**
+		 * Marks the current position if it qualifies for the given counter in the given direction.
+		 * @param row The row of the current position.
+		 * @param col The column of the current position.
+		 * @param val The counter to mark for.
+		 * @param dir The direction to search into.
+		 * @param index The current mark index.
+		 * @return true if the cell was marked, false if not.
+		 */
+		bool MarkFor(int row, int col, Board::Counter val, Point dir, Board::value_type& index);
 
 	};
 

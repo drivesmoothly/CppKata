@@ -18,47 +18,62 @@ PossibilitiesMarker::PossibilitiesMarker(Board& b)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-void PossibilitiesMarker::MarkForWhite()
+void PossibilitiesMarker::MarkFor(Board::Counter counter)
 {
-	Board::value_type possibility{1};
+	Board::value_type index{1};
 	for (int row{ 0 }; row != _board.GetSize(); ++row)
 		for (int col{ 0 }; col != _board.GetSize(); ++col)
 			if (_board.GetValueAt(row, col) == Board::Empty)
 			{
-				// Case 1, we have a Black below.
-				if (NextIs(row, col, Board::Black, Point{1, 0}) &&
-						FindNextContiguous(row, col, Board::White, [](int& row, int& col){++row;}))
-					_board.SetValueAt(row, col, possibility++);
-				// Case 2, we have a Black on the right
-				else if (NextIs(row, col, Board::Black, Point{0, 1}) &&
-						FindNextContiguous(row, col, Board::White, [](int& row, int& col){++col;}))
-					_board.SetValueAt(row, col, possibility++);
-				// Case 3, we have a Black on the left
-				else if (NextIs(row, col, Board::Black, Point{0, -1}) &&
-						FindNextContiguous(row, col, Board::White, [](int& row, int& col){--col;}))
-					_board.SetValueAt(row, col, possibility++);
-				// Case 4, we have a Black on top
-				else if (NextIs(row, col, Board::Black, Point{-1, 0}) &&
-						FindNextContiguous(row, col, Board::White, [](int& row, int& col){--row;}))
-					_board.SetValueAt(row, col, possibility++);
+				MarkFor(row, col, counter, Point{1, 0}, index) ||
+				MarkFor(row, col, counter, Point{-1, 0}, index) ||
+				MarkFor(row, col, counter, Point{0, 1}, index) ||
+				MarkFor(row, col, counter, Point{0, -1}, index) ||
+
+				MarkFor(row, col, counter, Point{1, 1}, index) ||
+				MarkFor(row, col, counter, Point{1, -1}, index) ||
+				MarkFor(row, col, counter, Point{-1, 1}, index) ||
+				MarkFor(row, col, counter, Point{-1, -1}, index);
 			}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-bool PossibilitiesMarker::FindNextContiguous(int row, int col, Board::Counter v,
-		std::function<void(int&, int&)> moveToNext)
+bool PossibilitiesMarker::MarkFor(int row, int col, Board::Counter val, Point dir, Board::value_type& index)
 {
-	moveToNext(row, col);
-	while (row < _board.GetSize())
+	Board::Counter opposite = static_cast<Board::Counter>(GetOpposite(val));
+	if (NextIs(row, col, opposite, dir) && FindNextContiguous(row, col, val, dir))
 	{
-		Board::value_type currentValue = _board.GetValueAt(row, col);
+		_board.SetValueAt(row, col, index++);
+		return true;
+	}
+	return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+bool PossibilitiesMarker::FindNextContiguous(int row, int col, Board::Counter v, Point direction)
+{
+	Point position = direction;
+	position.r += row;
+	position.c += col;
+	while (position.r >= 0 && position.r < _board.GetSize() &&
+			position.c >= 0 && position.c < _board.GetSize())
+	{
+		Board::value_type currentValue = _board.GetValueAt(position.r, position.c);
 		if (currentValue == v)
+		{
 			return true;
+		}
 		else if (currentValue == GetOpposite(v))
-			moveToNext(row, col);
+		{
+			position.r += direction.r;
+			position.c += direction.c;
+		}
 		else
+		{
 			return false;
+		}
 	}
 	return false;
 }

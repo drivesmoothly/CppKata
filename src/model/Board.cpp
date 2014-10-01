@@ -71,7 +71,26 @@ void Board::Serialize(std::ostream& os) const
 	for (unsigned int i{0}; i < _size; ++i)
 	{
 		std::for_each(it, it + _size, [&os](value_type c)
-				{ os << ((c == Board::Black) ? 'B' : (c == Board::White) ? 'W' : '.');});
+			{
+				switch (c)
+				{
+				case Board::Black:
+					os << 'B';
+					break;
+				case Board::White:
+					os << 'W';
+					break;
+				case Board::Empty:
+					os << '.';
+					break;
+				default:
+					{
+						int val = c;
+						os << val;
+						break;
+					}
+				}
+			});
 		it += _size;
 		os << std::endl;
 	}
