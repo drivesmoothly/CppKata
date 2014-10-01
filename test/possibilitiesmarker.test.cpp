@@ -47,6 +47,9 @@ TEST(PossibilitiesFiller, TestMarkSecondWhite)
 		"........\n"
 		"...BBB..\n"
 		"...WWW..\n"
+		"........\n"
+		"........\n"
+		"........\n"
 	};
 	std::stringstream ss{input};
 	ss >> b;
