@@ -108,18 +108,14 @@ namespace reversi
 	//
 	inline char Board::GetValueAt(unsigned int row, unsigned int col) const
 	{
-		if (_matrix.size() <= (col + row * _size))
-			throw std::range_error{"Row or column out of range"};
-		return _matrix[col + row * _size];
+		return _matrix.at(col + row * _size);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
 	//
 	inline void Board::SetValueAt(unsigned int row, unsigned int col, char val)
 	{
-		if (_matrix.size() <= (col + row * _size))
-			throw std::range_error{"Row or column out of range"};
-		_matrix[col + row * _size] = val;
+		_matrix.at(col + row * _size) = val;
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
