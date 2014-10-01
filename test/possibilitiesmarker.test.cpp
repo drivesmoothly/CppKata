@@ -5,7 +5,7 @@
  *      Author: Marius
  */
 
-#include "PossibilitiesFiller.h"
+#include "PossibilitiesMarker.h"
 #include "Board.h"
 #include "Game.h"
 #include "gtest/gtest.h"
