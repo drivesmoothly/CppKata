@@ -5,8 +5,8 @@
  *      Author: Marius
  */
 
-#ifndef POSSIBILITIESFILLER_H_
-#define POSSIBILITIESFILLER_H_
+#ifndef POSSIBILITIESMARKER_H_
+#define POSSIBILITIESMARKER_H_
 
 
 namespace reversi
@@ -18,7 +18,7 @@ class Board;
 /**
  * Responsible for filling the possibilities.
  */
-class PossibilitiesFiller
+class PossibilitiesMarker
 {
 private:
 	/**
@@ -31,15 +31,15 @@ public:
 	 * Constructor. Takes the board as an argument.
 	 * @param b The board.
 	 */
-	PossibilitiesFiller(Board& b);
+	PossibilitiesMarker(Board& b);
 
 	/**
 	 * Fills the possibilities for white.
 	 */
-	void FillWhite();
+	void MarkForWhite();
 };
 
 }
 
 
-#endif /* POSSIBILITIESFILLER_H_ */
+#endif /* POSSIBILITIESMARKER_H_ */

@@ -5,21 +5,21 @@
  *      Author: Marius
  */
 
-#include "PossibilitiesFiller.h"
+#include "PossibilitiesMarker.h"
 #include "Board.h"
 
 using namespace reversi;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-PossibilitiesFiller::PossibilitiesFiller(Board& b)
+PossibilitiesMarker::PossibilitiesMarker(Board& b)
 : _board{b}
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-void PossibilitiesFiller::FillWhite()
+void PossibilitiesMarker::MarkForWhite()
 {
 	char possibility{1};
 	for (int i{ 0 }; i != _board.GetSize(); ++i)
@@ -27,9 +27,9 @@ void PossibilitiesFiller::FillWhite()
 			if (_board.GetValueAt(i, j) == '.')
 			{
 				// Case 1, we have a Black below.
-				if ((j < _board.GetSize() - 1) && (_board.GetValueAt(i, j + 1) == 'B'))
+				if ((i < _board.GetSize() - 1) && (_board.GetValueAt(i + 1, j) == 'B'))
 				{
-					if (_board.FindOnColumn(i, 'W') > j + 1)
+					if (_board.FindOnColumn(j, 'W') > i + 1)
 						_board.SetValueAt(i, j, possibility++);
 				}
 			}

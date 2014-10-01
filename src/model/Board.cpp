@@ -16,10 +16,6 @@ Board::Board(int size)
 : _size{ size }
 , _matrix( size * size, '.' )
 {
-	SetValueAt(size / 2 - 1, size / 2 - 1, 'B');
-	SetValueAt(size / 2, size / 2, 'B');
-	SetValueAt(size / 2 - 1, size / 2, 'W');
-	SetValueAt(size / 2, size / 2 - 1, 'W');
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,4 +40,11 @@ int Board::FindOnColumn(int col, char value) const
 		if (GetValueAt(i, col) == value)
 			return i;
 	return -1;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+void Board::Reset()
+{
+	std::fill(_matrix.begin(), _matrix.end(), '.');
 }

@@ -72,6 +72,11 @@ namespace reversi
 		 * @return -1 if not found. The row index if we found it.
 		 */
 		int FindOnColumn(int col, char value) const;
+
+		/**
+		 * Resets the board to empty.
+		 */
+		void Reset();
 	};
 
 	///////////////////////////////////////////////////////////////////////////////
