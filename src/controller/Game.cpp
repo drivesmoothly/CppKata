@@ -1,12 +1,20 @@
 #include "Game.h"
 #include "Board.h"
+#include "StartPositionBoTL.h"
 
 using namespace reversi;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 Game::Game(Board& b)
-: _board{b}
+: _board{b}, _startPositionOwn{new StartPositionBoTL{}}, _startPosition{*_startPositionOwn}
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+Game::Game(Board& b, StartPosition& sp)
+: _board{b}, _startPosition{sp}
 {
 }
 
@@ -14,10 +22,5 @@ Game::Game(Board& b)
 //
 void Game::NewGame()
 {
-	_board.Reset();
-	int size{_board.GetSize()};
-	_board.SetValueAt(size / 2 - 1, size / 2 - 1, Board::Black);
-	_board.SetValueAt(size / 2, size / 2, Board::Black);
-	_board.SetValueAt(size / 2 - 1, size / 2, Board::White);
-	_board.SetValueAt(size / 2, size / 2 - 1, Board::White);
+	_startPosition.Run(_board);
 }
